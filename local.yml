@@ -1,0 +1,34 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+    # Install packages
+    - name: ensure git is installed at latest version
+      apt: pkg=git state=latest
+    - name: ensure tmux is installed at latest version
+      apt: pkg=tmux state=latest
+    - name: ensure zsh is installed at latest version
+      apt: pkg=zsh state=latest
+
+    # Install git repos
+    - name: checkout dotfiles repository from GitHub
+      git: repo=https://github.com/jasonin2d/dotfiles.git
+           dest={{ lookup ('env', 'HOME') }}/dotfiles
+
+    # Change default shell to zsh
+    - name: change default shell to zsh
+      user:
+        name={{ lookup ('env', 'USER') }}
+        shell=/usr/bin/zsh
+
+    # Link dotfiles
+    - name: link tmux.conf from dotfiles directory
+      file:
+        src={{ lookup ('env', 'HOME') }}/dotfiles/tmux.conf
+        dest={{ lookup ('env', 'HOME') }}/.tmux.conf
+        state=link
+    - name: link vimrc from dotfiles directory
+      file:
+        src={{ lookup ('env', 'HOME') }}/dotfiles/vimrc
+        dest={{ lookup ('env', 'HOME') }}/.vimrc
+        state=link
