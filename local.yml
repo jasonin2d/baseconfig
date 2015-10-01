@@ -32,3 +32,8 @@
         src={{ lookup ('env', 'HOME') }}/dotfiles/vimrc
         dest={{ lookup ('env', 'HOME') }}/.vimrc
         state=link
+    - name: link zshrc from dotfiles directory
+      file:
+        src={{ lookup ('env', 'HOME') }}/dotfiles/zshrc
+        dest={{ lookup ('env', 'HOME') }}/.zshrc
+        state=link
