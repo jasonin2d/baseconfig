@@ -9,6 +9,8 @@
       apt: pkg=tmux state=latest
     - name: ensure zsh is installed at latest version
       apt: pkg=zsh state=latest
+    - name: ensure rsync is installed at latest version
+      apt: pkg=rsync state=latest
 
     # Install git repos
     - name: checkout dotfiles repository from GitHub
