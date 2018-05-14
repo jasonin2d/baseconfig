@@ -1,6 +1,7 @@
 ---
 - hosts: all
-  sudo: yes
+  become: yes
+  become_method: sudo
   tasks:
     # Install packages
     - name: ensure git is installed at latest version
@@ -11,6 +12,8 @@
       apt: pkg=zsh state=latest
     - name: ensure rsync is installed at latest version
       apt: pkg=rsync state=latest
+    - name: ensure vim is installed at latest version
+      apt: pkg=vim state=latest
 
     # Install git repos
     - name: checkout dotfiles repository from GitHub
