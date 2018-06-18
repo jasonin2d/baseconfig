@@ -2,43 +2,37 @@
 - hosts: all
   become: yes
   become_method: sudo
+  
   tasks:
-    # Install packages
-    - name: ensure git is installed at latest version
-      apt: pkg=git state=latest
-    - name: ensure tmux is installed at latest version
-      apt: pkg=tmux state=latest
-    - name: ensure zsh is installed at latest version
-      apt: pkg=zsh state=latest
-    - name: ensure rsync is installed at latest version
-      apt: pkg=rsync state=latest
-    - name: ensure vim is installed at latest version
-      apt: pkg=vim state=latest
+    - name: Install standard packages
+      apt:
+        pkg: "{{ item }}"
+        state: latest
+      with_items:
+        - git
+        - rsync
+        - tmux
+        - vim
+        - zsh
 
-    # Install git repos
-    - name: checkout dotfiles repository from GitHub
-      git: repo=https://github.com/jasonin2d/dotfiles.git
-           dest={{ lookup ('env', 'HOME') }}/dotfiles
+    - name: Checkout dotfiles repository from GitHub
+      git:
+        repo: "https://github.com/jasonin2d/dotfiles.git"
+        dest: "{{ lookup ('env', 'HOME') }}/dotfiles"
 
-    # Change default shell to zsh
-    - name: change default shell to zsh
+    - name: Change default shell to zsh
       user:
-        name={{ lookup ('env', 'USER') }}
-        shell=/usr/bin/zsh
+        name: "{{ lookup ('env', 'USER') }}"
+        shell: /usr/bin/zsh
 
-    # Link dotfiles
-    - name: link tmux.conf from dotfiles directory
+    - name: Link dotfiles
       file:
-        src={{ lookup ('env', 'HOME') }}/dotfiles/tmux.conf
-        dest={{ lookup ('env', 'HOME') }}/.tmux.conf
-        state=link
-    - name: link vimrc from dotfiles directory
-      file:
-        src={{ lookup ('env', 'HOME') }}/dotfiles/vimrc
-        dest={{ lookup ('env', 'HOME') }}/.vimrc
-        state=link
-    - name: link zshrc from dotfiles directory
-      file:
-        src={{ lookup ('env', 'HOME') }}/dotfiles/zshrc
-        dest={{ lookup ('env', 'HOME') }}/.zshrc
-        state=link
+        src: "{{ lookup ('env', 'HOME') }}/dotfiles/{{ item }}"
+        dest: "{{ lookup ('env', 'HOME') }}/.{{ item }}"
+        state: link
+      with_items:
+        - tmux.conf
+        - vimrc
+        - zshrc
+
+...
