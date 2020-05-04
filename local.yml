@@ -6,14 +6,8 @@
   tasks:
     - name: Install standard packages
       apt:
-        pkg: "{{ item }}"
+        pkg: ['git', 'rsync', 'tmux', 'vim', 'zsh']
         state: latest
-      with_items:
-        - git
-        - rsync
-        - tmux
-        - vim
-        - zsh
 
     - name: Checkout dotfiles repository from GitHub
       git:
