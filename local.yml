@@ -6,7 +6,7 @@
   tasks:
     - name: Install standard packages
       apt:
-        pkg: ['git', 'rsync', 'tmux', 'vim', 'zsh']
+        pkg: ['git', 'rsync', 'tmux', 'vim', 'zsh', 'fish']
         state: latest
 
     - name: Checkout dotfiles repository from GitHub
@@ -14,10 +14,10 @@
         repo: "https://github.com/jasonin2d/dotfiles.git"
         dest: "{{ lookup ('env', 'HOME') }}/dotfiles"
 
-    - name: Change default shell to zsh
+    - name: Change default shell to fish
       user:
         name: "{{ lookup ('env', 'USER') }}"
-        shell: /usr/bin/zsh
+        shell: /usr/bin/fish
 
     - name: Link dotfiles
       file:
